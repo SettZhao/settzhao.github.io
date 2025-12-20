@@ -1,8 +1,671 @@
-<p>Hello 大家好</p>
-<p>我是settzhao，这是我的个人网站。 </p>
-<p>很高兴你来到这里, 你可以在以下的网站找到我</p>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sett Zhao - 个人主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<ul>
-  <li> <a href="https://www.zhihu.com/people/AJLoveChina">知乎</a> </li>
-  <li> <a href="http://hejie.nigeerhuo.com">我的博客(已经不更细了,现在在知乎写文章)</a> </li>
-</ul>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 赛博朋克动态网格背景 */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* 数据流效果 */
+        .data-stream {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .data-stream span {
+            position: absolute;
+            top: -100%;
+            font-size: 12px;
+            color: rgba(0, 255, 255, 0.5);
+            animation: dataFall linear infinite;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes dataFall {
+            to {
+                top: 110%;
+                opacity: 0;
+            }
+        }
+
+        /* 霓虹城市轮廓 */
+        .city-scape {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(to top, rgba(10, 14, 39, 0.9) 0%, transparent 100%);
+            z-index: 0;
+        }
+
+        .city-scape::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: 
+                repeating-linear-gradient(90deg, 
+                    transparent 0px, 
+                    transparent 20px,
+                    rgba(0, 255, 255, 0.3) 20px,
+                    rgba(0, 255, 255, 0.3) 22px,
+                    transparent 22px,
+                    transparent 40px,
+                    rgba(255, 0, 255, 0.3) 40px,
+                    rgba(255, 0, 255, 0.3) 43px,
+                    transparent 43px,
+                    transparent 80px,
+                    rgba(0, 255, 255, 0.2) 80px,
+                    rgba(0, 255, 255, 0.2) 83px);
+            animation: cityGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes cityGlow {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(0deg, rgba(10, 20, 40, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 20, 40, 0.8) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(200, 170, 110, 0.1) 0%, 
+                rgba(13, 43, 69, 0.3) 50%, 
+                rgba(10, 20, 40, 0.9) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 赛博朋克扫描线 */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 255, 0.03) 0px,
+                transparent 2px,
+                transparent 4px
+            );
+            z-index: 3;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        /* 霓虹边框效果 */
+        .neon-corner {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            border: 2px solid transparent;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .neon-corner.top-left {
+            top: 20px;
+            left: 20px;
+            border-top: 2px solid rgba(0, 255, 255, 0.6);
+            border-left: 2px solid rgba(0, 255, 255, 0.6);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .neon-corner.top-right {
+            top: 20px;
+            right: 20px;
+            border-top: 2px solid rgba(255, 0, 255, 0.6);
+            border-right: 2px solid rgba(255, 0, 255, 0.6);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .neon-corner.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.6);
+            border-left: 2px solid rgba(0, 255, 255, 0.6);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .neon-corner.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.6);
+            border-right: 2px solid rgba(255, 0, 255, 0.6);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: rgba(13, 43, 69, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 80px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        inset 0 0 60px rgba(200, 170, 110, 0.05);
+            border: 2px solid rgba(200, 170, 110, 0.3);
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(200, 170, 110, 0.4), 
+                rgba(0, 255, 255, 0.3), 
+                rgba(255, 0, 255, 0.3),
+                rgba(200, 170, 110, 0.4));
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+            background-size: 300% 300%;
+        }
+
+        .profile-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 255, 255, 0.1),
+                inset 0 0 60px rgba(255, 0, 255, 0.05);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                opacity: 0.4;
+                background-position: 0% 50%;
+            }
+            50% {
+                opacity: 0.9;
+                background-position: 100% 50%;
+            }
+            100% {
+                opacity: 0.4;
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c8aa6e 0%, #785a28 100%);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #0a1428;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(200, 170, 110, 0.5),
+                        0 0 40px rgba(200, 170, 110, 0.3);
+            animation: float 3s ease-in-out infinite;
+            border: 4px solid #c8aa6e;
+            position: relative;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            background: linear-gradient(45deg, 
+                #c8aa6e, 
+                #00ffff, 
+                #ff00ff, 
+                #c8aa6e);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.6;
+            animation: rotate 3s linear infinite;
+            filter: blur(2px);
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            right: -12px;
+            bottom: -12px;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(0, 255, 255, 0.4),
+                transparent,
+                rgba(255, 0, 255, 0.4),
+                transparent
+            );
+            border-radius: 50%;
+            z-index: -2;
+            animation: rotate 5s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        h1 {
+            color: #c8aa6e;
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
+                         0 0 20px rgba(0, 255, 255, 0.4),
+                         0 0 30px rgba(255, 0, 255, 0.3),
+                         2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1.5s ease-out, textGlitch 3s infinite;
+            font-weight: 700;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        @keyframes textGlitch {
+            0%, 90%, 100% {
+                text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
+                             0 0 20px rgba(0, 255, 255, 0.4),
+                             0 0 30px rgba(255, 0, 255, 0.3);
+            }
+            92% {
+                text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
+                             2px 0 20px rgba(0, 255, 255, 0.8),
+                             -2px 0 30px rgba(255, 0, 255, 0.8);
+            }
+            94% {
+                text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
+                             -2px 0 20px rgba(0, 255, 255, 0.8),
+                             2px 0 30px rgba(255, 0, 255, 0.8);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .subtitle {
+            color: rgba(200, 170, 110, 0.8);
+            font-size: 18px;
+            margin-bottom: 40px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: rgba(200, 170, 110, 0.1);
+            color: #c8aa6e;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(200, 170, 110, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-btn:hover {
+            background: rgba(200, 170, 110, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(200, 170, 110, 0.3),
+                        0 0 20px rgba(0, 255, 255, 0.4),
+                        0 0 40px rgba(255, 0, 255, 0.2);
+            border-color: #c8aa6e;
+            text-shadow: 0 0 10px rgba(200, 170, 110, 0.5);
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .wave {
+            display: inline-block;
+            animation: wave 1.5s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(20deg);
+            }
+            75% {
+                transform: rotate(-20deg);
+            }
+        }
+
+        .skills {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            padding: 10px 20px;
+            background: rgba(200, 170, 110, 0.1);
+            color: #c8aa6e;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 1px solid rgba(200, 170, 110, 0.3);
+            animation: fadeIn 2.5s ease-out;
+            box-shadow: inset 0 0 10px rgba(200, 170, 110, 0.1),
+                        0 0 5px rgba(0, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            box-shadow: inset 0 0 15px rgba(200, 170, 110, 0.2),
+                        0 0 15px rgba(0, 255, 255, 0.4),
+                        0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .profile-card {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 赛博朋克背景元素 -->
+    <div class="cyber-grid"></div>
+    <div class="data-stream" id="dataStream"></div>
+    <div class="city-scape"></div>
+    
+    <!-- 赛博朋克扫描线 -->
+    <div class="scanlines"></div>
+    
+    <!-- 赛博朋克霓虹角边框 -->
+    <div class="neon-corner top-left"></div>
+    <div class="neon-corner top-right"></div>
+    <div class="neon-corner bottom-left"></div>
+    <div class="neon-corner bottom-right"></div>
+    
+    <div id="particles-js"></div>
+    
+    <div class="container">
+        <div class="profile-card">
+            <div class="avatar">SZ</div>
+            <h1>Sett Zhao <span class="wave">👋</span></h1>
+            <p class="subtitle">欢迎来到我的个人主页</p>
+            
+            <div class="social-links">
+                <a href="https://juejin.cn/user/2694271943574467" target="_blank" class="social-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 14.316l7.454-5.88-2.022-1.625L12 11.1l-5.432-4.288-2.02 1.624L12 14.316z"/>
+                        <path d="M12 17.372l9.524-7.513-2.018-1.624-7.506 5.927-7.505-5.927-2.017 1.624L12 17.372z"/>
+                    </svg>
+                    我的博客
+                </a>
+            </div>
+
+            <div class="skills">
+                <span class="skill-tag">💻 开发者</span>
+                <span class="skill-tag">✍️ 博主</span>
+                <span class="skill-tag">🚀 Gamer</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // 创建数据流效果
+        function createDataStream() {
+            const dataStream = document.getElementById('dataStream');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            for (let i = 0; i < 30; i++) {
+                const span = document.createElement('span');
+                const text = Array(Math.floor(Math.random() * 10) + 5)
+                    .fill(0)
+                    .map(() => chars[Math.floor(Math.random() * chars.length)])
+                    .join('');
+                span.textContent = text;
+                span.style.left = Math.random() * 100 + '%';
+                span.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                span.style.animationDelay = Math.random() * 5 + 's';
+                dataStream.appendChild(span);
+            }
+        }
+        
+        createDataStream();
+
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 60,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#c8aa6e'
+                },
+                shape: {
+                    type: 'circle'
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#c8aa6e',
+                    opacity: 0.3,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'grab'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
+</html>
