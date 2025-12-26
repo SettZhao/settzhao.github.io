@@ -502,6 +502,208 @@
             transform: translateY(-2px);
         }
 
+        /* 技术文章弹窗样式 */
+        .tech-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tech-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: rgba(13, 43, 69, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        inset 0 0 60px rgba(200, 170, 110, 0.05);
+            border: 2px solid rgba(200, 170, 110, 0.3);
+            position: relative;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(200, 170, 110, 0.4), 
+                rgba(0, 255, 255, 0.3), 
+                rgba(255, 0, 255, 0.3),
+                rgba(200, 170, 110, 0.4));
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(200, 170, 110, 0.2);
+        }
+
+        .modal-title {
+            color: #c8aa6e;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
+                         0 0 20px rgba(0, 255, 255, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .close-btn {
+            background: rgba(200, 170, 110, 0.1);
+            border: 2px solid rgba(200, 170, 110, 0.4);
+            color: #c8aa6e;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: rgba(200, 170, 110, 0.3);
+            border-color: #c8aa6e;
+            transform: rotate(90deg);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5),
+                        0 0 40px rgba(255, 0, 255, 0.3);
+        }
+
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .article-item {
+            background: rgba(200, 170, 110, 0.05);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(0, 255, 255, 0.6),
+                rgba(255, 0, 255, 0.6));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-item:hover {
+            background: rgba(200, 170, 110, 0.1);
+            border-color: rgba(200, 170, 110, 0.5);
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2),
+                        0 0 30px rgba(255, 0, 255, 0.1);
+        }
+
+        .article-item:hover::before {
+            opacity: 1;
+        }
+
+        .article-link {
+            color: #c8aa6e;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .article-link:hover {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .article-desc {
+            color: rgba(200, 170, 110, 0.7);
+            font-size: 14px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .article-tag {
+            display: inline-block;
+            background: rgba(0, 255, 255, 0.1);
+            color: rgba(0, 255, 255, 0.8);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        /* 自定义滚动条 */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(200, 170, 110, 0.1);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(200, 170, 110, 0.4);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(200, 170, 110, 0.6);
+        }
+
         @media (max-width: 768px) {
             .profile-card {
                 padding: 40px 30px;
@@ -519,6 +721,19 @@
                 width: 120px;
                 height: 120px;
                 font-size: 48px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+                max-height: 90vh;
+            }
+
+            .modal-title {
+                font-size: 22px;
+            }
+
+            .article-item {
+                padding: 15px;
             }
         }
     </style>
@@ -564,6 +779,12 @@
                     </svg>
                     🎄 圣诞体验
                 </a>
+                <a href="javascript:void(0)" onclick="openTechModal()" class="social-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                    📚 技术收藏
+                </a>
             </div>
 
             <div class="skills">
@@ -574,8 +795,83 @@
         </div>
     </div>
 
+    <!-- 技术文章弹窗 -->
+    <div id="techModal" class="tech-modal" onclick="closeModalOnOutside(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📚 技术文章收藏</h2>
+                <button class="close-btn" onclick="closeTechModal()">×</button>
+            </div>
+            <div class="article-list">
+                <div class="article-item">
+                    <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml" target="_blank" class="article-link">
+                        IANA Service Name and Port Number Registry
+                    </a>
+                    <p class="article-desc">IANA 官方服务端口注册表，包含了所有标准化的网络服务端口号及其对应的服务名称</p>
+                    <span class="article-tag">网络协议</span>
+                </div>
+                
+                <div class="article-item">
+                    <a href="https://developer.mozilla.org/zh-CN/" target="_blank" class="article-link">
+                        MDN Web Docs
+                    </a>
+                    <p class="article-desc">Web 开发者必备的技术文档，涵盖 HTML、CSS、JavaScript 等前端技术</p>
+                    <span class="article-tag">前端开发</span>
+                </div>
+                
+                <div class="article-item">
+                    <a href="https://www.rfc-editor.org/" target="_blank" class="article-link">
+                        RFC Editor
+                    </a>
+                    <p class="article-desc">互联网标准文档 RFC（Request for Comments）的官方发布站点</p>
+                    <span class="article-tag">网络标准</span>
+                </div>
+                
+                <div class="article-item">
+                    <a href="https://threejs.org/docs/" target="_blank" class="article-link">
+                        Three.js Documentation
+                    </a>
+                    <p class="article-desc">Three.js 官方文档，学习 WebGL 和 3D 图形编程的最佳资源</p>
+                    <span class="article-tag">3D图形</span>
+                </div>
+                
+                <div class="article-item">
+                    <a href="https://webglfundamentals.org/" target="_blank" class="article-link">
+                        WebGL Fundamentals
+                    </a>
+                    <p class="article-desc">从基础开始学习 WebGL，深入理解 GPU 图形渲染原理</p>
+                    <span class="article-tag">WebGL</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        // 技术文章弹窗控制
+        function openTechModal() {
+            document.getElementById('techModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTechModal() {
+            document.getElementById('techModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeModalOnOutside(event) {
+            if (event.target.id === 'techModal') {
+                closeTechModal();
+            }
+        }
+
+        // ESC 键关闭弹窗
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeTechModal();
+            }
+        });
+
         // 创建数据流效果
         function createDataStream() {
             const dataStream = document.getElementById('dataStream');
