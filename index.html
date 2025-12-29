@@ -218,22 +218,175 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .profile-card {
+            max-width: 1200px;
+            width: 100%;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Bento 网格布局 */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .bento-card {
             background: rgba(13, 43, 69, 0.6);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 60px 80px;
+            padding: 30px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
                         inset 0 0 60px rgba(200, 170, 110, 0.05);
             border: 2px solid rgba(200, 170, 110, 0.3);
-            text-align: center;
-            animation: fadeInUp 1s ease-out;
-            max-width: 600px;
-            width: 100%;
             position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(200, 170, 110, 0.4), 
+                rgba(0, 255, 255, 0.3), 
+                rgba(255, 0, 255, 0.3),
+                rgba(200, 170, 110, 0.4));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background-size: 300% 300%;
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6),
+                        0 0 40px rgba(0, 255, 255, 0.3),
+                        0 0 60px rgba(255, 0, 255, 0.2);
+        }
+
+        /* 大卡片 - 个人信息 */
+        .bento-card.profile-main {
+            grid-column: span 2;
+            grid-row: span 2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 中等卡片 */
+        .bento-card.medium {
+            grid-column: span 2;
+        }
+
+        /* 链接卡片 */
+        .bento-card.link-card {
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .bento-card.link-card h3 {
+            color: #c8aa6e;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(200, 170, 110, 0.5);
+        }
+
+        .bento-card.link-card p {
+            color: rgba(200, 170, 110, 0.7);
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            color: #c8aa6e;
+            transition: all 0.3s ease;
+        }
+
+        .bento-card:hover .card-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(200, 170, 110, 0.8));
+        }
+
+        /* GitHub 卡片 */
+        .bento-card.github {
+            background: rgba(88, 166, 255, 0.08);
+            border-color: rgba(88, 166, 255, 0.3);
+        }
+
+        .bento-card.github .card-icon,
+        .bento-card.github h3 {
+            color: #58a6ff;
+        }
+
+        /* 掘金卡片 */
+        .bento-card.juejin {
+            background: rgba(0, 110, 255, 0.08);
+            border-color: rgba(0, 110, 255, 0.3);
+        }
+
+        .bento-card.juejin .card-icon,
+        .bento-card.juejin h3 {
+            color: #007fff;
+        }
+
+        /* 微信卡片 */
+        .bento-card.wechat {
+            background: rgba(9, 187, 7, 0.08);
+            border-color: rgba(9, 187, 7, 0.3);
+        }
+
+        .bento-card.wechat .card-icon,
+        .bento-card.wechat h3 {
+            color: #09bb07;
+        }
+
+        /* 圣诞卡片 */
+        .bento-card.christmas {
+            background: rgba(255, 69, 69, 0.08);
+            border-color: rgba(255, 69, 69, 0.3);
+        }
+
+        .bento-card.christmas .card-icon,
+        .bento-card.christmas h3 {
+            color: #ff4545;
+        }
+
+        /* 技术卡片 */
+        .bento-card.tech {
+            background: rgba(255, 122, 0, 0.08);
+            border-color: rgba(255, 122, 0, 0.3);
+        }
+
+        .bento-card.tech .card-icon,
+        .bento-card.tech h3 {
+            color: #ff7a00;
         }
 
         .profile-card::before {
@@ -252,6 +405,7 @@
             z-index: -1;
             animation: borderGlow 3s ease-in-out infinite;
             background-size: 300% 300%;
+            display: none;
         }
 
         .profile-card::after {
@@ -267,6 +421,7 @@
                 inset 0 0 60px rgba(255, 0, 255, 0.05);
             z-index: -1;
             pointer-events: none;
+            display: none;
         }
 
         @keyframes borderGlow {
@@ -373,8 +528,8 @@
 
         h1 {
             color: #c8aa6e;
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 42px;
+            margin-bottom: 10px;
             text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
                          0 0 20px rgba(0, 255, 255, 0.4),
                          0 0 30px rgba(255, 0, 255, 0.3),
@@ -414,80 +569,25 @@
 
         .subtitle {
             color: rgba(200, 170, 110, 0.8);
-            font-size: 18px;
-            margin-bottom: 40px;
+            font-size: 16px;
+            margin-bottom: 20px;
             animation: fadeIn 2s ease-out;
         }
 
-        .social-links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .social-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 30px;
-            background: rgba(200, 170, 110, 0.1);
-            color: #c8aa6e;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(200, 170, 110, 0.4);
-            backdrop-filter: blur(10px);
-        }
-
-        .social-btn:hover {
-            background: rgba(200, 170, 110, 0.2);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(200, 170, 110, 0.3),
-                        0 0 20px rgba(0, 255, 255, 0.4),
-                        0 0 40px rgba(255, 0, 255, 0.2);
-            border-color: #c8aa6e;
-            text-shadow: 0 0 10px rgba(200, 170, 110, 0.5);
-        }
-
-        .icon {
-            width: 24px;
-            height: 24px;
-        }
-
-        .wave {
-            display: inline-block;
-            animation: wave 1.5s ease-in-out infinite;
-        }
-
-        @keyframes wave {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(20deg);
-            }
-            75% {
-                transform: rotate(-20deg);
-            }
-        }
-
         .skills {
-            margin-top: 40px;
+            margin-top: 30px;
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .skill-tag {
-            padding: 10px 20px;
+            padding: 8px 16px;
             background: rgba(200, 170, 110, 0.1);
             color: #c8aa6e;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             border: 1px solid rgba(200, 170, 110, 0.3);
             animation: fadeIn 2.5s ease-out;
             box-shadow: inset 0 0 10px rgba(200, 170, 110, 0.1),
@@ -500,6 +600,15 @@
                         0 0 15px rgba(0, 255, 255, 0.4),
                         0 0 30px rgba(255, 0, 255, 0.2);
             transform: translateY(-2px);
+        }
+
+        /* 移除旧的社交链接样式 */
+        .social-links {
+            display: none;
+        }
+
+        .social-btn {
+            display: none;
         }
 
         /* 技术文章弹窗样式 */
@@ -704,23 +813,121 @@
             background: rgba(200, 170, 110, 0.6);
         }
 
+        /* 微信二维码弹窗样式 */
+        .qrcode-modal {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .qrcode-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .qrcode-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 12px;
+            border: 3px solid rgba(200, 170, 110, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(0, 255, 255, 0.2),
+                        0 0 60px rgba(255, 0, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .qrcode-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6),
+                        0 0 50px rgba(0, 255, 255, 0.3),
+                        0 0 80px rgba(255, 0, 255, 0.2);
+            border-color: rgba(200, 170, 110, 0.6);
+        }
+
+        .qrcode-tip {
+            color: rgba(200, 170, 110, 0.8);
+            font-size: 16px;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+        }
+
+        .wave {
+            display: inline-block;
+            animation: wave 1.5s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(20deg);
+            }
+            75% {
+                transform: rotate(-20deg);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .bento-card.profile-main {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            .bento-card.medium {
+                grid-column: span 2;
+            }
+        }
+
         @media (max-width: 768px) {
-            .profile-card {
-                padding: 40px 30px;
+            .container {
+                padding: 20px 15px;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .bento-card {
+                padding: 25px;
+            }
+
+            .bento-card.profile-main,
+            .bento-card.medium {
+                grid-column: span 1;
             }
 
             h1 {
-                font-size: 36px;
+                font-size: 32px;
             }
 
             .subtitle {
-                font-size: 16px;
+                font-size: 14px;
             }
 
             .avatar {
-                width: 120px;
-                height: 120px;
-                font-size: 48px;
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .card-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .bento-card.link-card h3 {
+                font-size: 16px;
             }
 
             .modal-content {
@@ -757,40 +964,70 @@
     
     <div class="container">
         <div class="profile-card">
-            <div class="avatar">SZ</div>
-            <h1>Sett Zhao <span class="wave">👋</span></h1>
-            <p class="subtitle">欢迎来到我的个人主页</p>
-            
-            <div class="social-links">
-                <a href="https://juejin.cn/user/2694271943574467" target="_blank" class="social-btn">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+            <!-- Bento 网格布局 -->
+            <div class="bento-grid">
+                <!-- 个人信息主卡片 -->
+                <div class="bento-card profile-main">
+                    <div class="avatar">SZ</div>
+                    <h1>Sett Zhao <span class="wave">👋</span></h1>
+                    <p class="subtitle">欢迎来到我的个人主页</p>
+                    <div class="skills">
+                        <span class="skill-tag">💻 开发者</span>
+                        <span class="skill-tag">✍️ 博主</span>
+                        <span class="skill-tag">🚀 Gamer</span>
+                    </div>
+                </div>
+
+                <!-- GitHub 卡片 -->
+                <a href="https://github.com/SettZhao" target="_blank" class="bento-card link-card github">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    <h3>GitHub</h3>
+                    <p>查看我的开源项目</p>
+                </a>
+
+                <!-- 稀土掘金卡片 -->
+                <a href="https://juejin.cn/user/2694271943574467" target="_blank" class="bento-card link-card juejin">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 14.316l7.454-5.88-2.022-1.625L12 11.1l-5.432-4.288-2.02 1.624L12 14.316z"/>
                         <path d="M12 17.372l9.524-7.513-2.018-1.624-7.506 5.927-7.505-5.927-2.017 1.624L12 17.372z"/>
                     </svg>
-                    我的博客
+                    <h3>稀土掘金</h3>
+                    <p>阅读我的技术文章</p>
                 </a>
-                <a href="圣诞树.html" target="_blank" class="social-btn">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+
+                <!-- 微信公众号卡片 -->
+                <div onclick="openWechatModal()" class="bento-card link-card wechat">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18z"/>
+                        <path d="M23.759 14.333c0-3.278-3.28-5.936-7.321-5.936-4.041 0-7.321 2.658-7.321 5.936 0 3.279 3.28 5.937 7.321 5.937.849 0 1.668-.126 2.442-.352a.824.824 0 0 1 .685.09l1.79 1.048c.066.04.128.05.158.05.121 0 .218-.106.218-.238 0-.066-.023-.123-.044-.184l-.367-1.392a.555.555 0 0 1 .201-.626c1.628-1.261 2.638-3.037 2.638-5.032zm-9.932-1.416c-.524 0-.95-.464-.95-1.036 0-.572.426-1.036.95-1.036.524 0 .95.464.95 1.036 0 .572-.426 1.036-.95 1.036zm4.729 0c-.524 0-.95-.464-.95-1.036 0-.572.426-1.036.95-1.036.524 0 .95.464.95 1.036 0 .572-.426 1.036-.95 1.036z"/>
+                    </svg>
+                    <h3>微信公众号</h3>
+                    <p>扫码关注我的公众号</p>
+                </div>
+
+                <!-- 圣诞体验卡片 -->
+                <a href="圣诞树.html" target="_blank" class="bento-card link-card christmas">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 8v12h6v-6h4v6h6V8l-8-6z"/>
                         <path d="M12 2l-1.5 1.5L12 5l1.5-1.5L12 2z"/>
                         <circle cx="12" cy="9" r="1"/>
                         <circle cx="9" cy="12" r="1"/>
                         <circle cx="15" cy="12" r="1"/>
                     </svg>
-                    🎄 圣诞体验
+                    <h3>🎄 圣诞体验</h3>
+                    <p>特别节日互动页面</p>
                 </a>
-                <a href="javascript:void(0)" onclick="openTechModal()" class="social-btn">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+
+                <!-- 技术收藏卡片 -->
+                <div onclick="openTechModal()" class="bento-card link-card tech">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
                     </svg>
-                    📚 技术收藏
-                </a>
-            </div>
-
-            <div class="skills">
-                <span class="skill-tag">💻 开发者</span>
-                <span class="skill-tag">✍️ 博主</span>
-                <span class="skill-tag">🚀 Gamer</span>
+                    <h3>📚 技术收藏</h3>
+                    <p>精选技术文章和资源</p>
+                </div>
             </div>
         </div>
     </div>
@@ -846,6 +1083,20 @@
         </div>
     </div>
 
+    <!-- 微信公众号二维码弹窗 -->
+    <div id="wechatModal" class="tech-modal" onclick="closeWechatModalOnOutside(event)">
+        <div class="modal-content qrcode-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">📱 微信公众号</h2>
+                <button class="close-btn" onclick="closeWechatModal()">×</button>
+            </div>
+            <div class="qrcode-container">
+                <img src="qrcode/qrcode_for_gh_7843d1a254b7_258.jpg" alt="微信公众号二维码" class="qrcode-image">
+                <p class="qrcode-tip">扫描二维码关注我的微信公众号</p>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         // 技术文章弹窗控制
@@ -865,10 +1116,28 @@
             }
         }
 
+        // 微信二维码弹窗控制
+        function openWechatModal() {
+            document.getElementById('wechatModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWechatModal() {
+            document.getElementById('wechatModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeWechatModalOnOutside(event) {
+            if (event.target.id === 'wechatModal') {
+                closeWechatModal();
+            }
+        }
+
         // ESC 键关闭弹窗
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeTechModal();
+                closeWechatModal();
             }
         });
 
