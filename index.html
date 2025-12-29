@@ -389,6 +389,17 @@
             color: #ff7a00;
         }
 
+        /* CSDN卡片 */
+        .bento-card.csdn {
+            background: rgba(252, 80, 68, 0.08);
+            border-color: rgba(252, 80, 68, 0.3);
+        }
+
+        .bento-card.csdn .card-icon,
+        .bento-card.csdn h3 {
+            color: #fc5044;
+        }
+
         .profile-card::before {
             content: '';
             position: absolute;
@@ -817,6 +828,8 @@
         .qrcode-modal {
             max-width: 500px;
             text-align: center;
+            overflow: hidden;
+            max-height: none;
         }
 
         .qrcode-container {
@@ -995,6 +1008,16 @@
                     </svg>
                     <h3>稀土掘金</h3>
                     <p>阅读我的技术文章</p>
+                </a>
+
+                <!-- CSDN卡片 -->
+                <a href="https://blog.csdn.net/qq_42316973" target="_blank" class="bento-card link-card csdn">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" opacity="0.3"/>
+                    </svg>
+                    <h3>CSDN博客</h3>
+                    <p>我的技术博客文章</p>
                 </a>
 
                 <!-- 微信公众号卡片 -->
