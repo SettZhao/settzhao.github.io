@@ -644,7 +644,7 @@
         }
 
         .modal-content {
-            background: rgba(13, 43, 69, 0.95);
+            background: rgba(13, 43, 69, 0.98); /* 改用纯色背景，避免分层 */
             border-radius: 20px;
             padding: 40px;
             max-width: 700px;
@@ -656,24 +656,30 @@
             border: 2px solid rgba(200, 170, 110, 0.3);
             position: relative;
             animation: slideIn 0.4s ease-out;
+            /* 防止背景穿透 */
+            isolation: isolate;
         }
 
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, 
-                rgba(200, 170, 110, 0.4), 
-                rgba(0, 255, 255, 0.3), 
-                rgba(255, 0, 255, 0.3),
-                rgba(200, 170, 110, 0.4));
-            border-radius: 20px;
-            z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite;
-            background-size: 300% 300%;
+        /* 滚动区域背景增强 */
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(13, 43, 69, 0.98); /* 与弹窗背景完全一致，避免分层 */
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, 
+                rgba(200, 170, 110, 0.6), 
+                rgba(0, 255, 255, 0.4));
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(200, 170, 110, 0.3);
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, 
+                rgba(200, 170, 110, 0.8), 
+                rgba(0, 255, 255, 0.6));
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
         }
 
         @keyframes slideIn {
@@ -810,7 +816,7 @@
         }
 
         .modal-content::-webkit-scrollbar-track {
-            background: rgba(200, 170, 110, 0.1);
+            background: rgba(13, 43, 69, 0.98); /* 与弹窗背景完全一致，避免分层 */
             border-radius: 4px;
         }
 
@@ -850,6 +856,18 @@
                         0 0 40px rgba(0, 255, 255, 0.2),
                         0 0 60px rgba(255, 0, 255, 0.1);
             transition: all 0.3s ease;
+            animation: qrCodeAppear 0.5s ease-out;
+        }
+
+        @keyframes qrCodeAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotateY(-90deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
         }
 
         .qrcode-image:hover {
@@ -865,6 +883,7 @@
             font-size: 16px;
             margin: 0;
             text-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+            animation: fadeIn 0.8s ease-out 0.3s both;
         }
 
         .wave {
@@ -881,6 +900,924 @@
             }
             75% {
                 transform: rotate(-20deg);
+            }
+        }
+
+        /* 增强弹窗层级管理 */
+        .tech-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* 确保微信弹窗有更高的层级 */
+        #wechatModal {
+            z-index: 1001;
+        }
+
+        /* 当多个弹窗存在时，确保后打开的在上层 */
+        .tech-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1001;
+        }
+
+        /* 微信弹窗特殊样式 */
+        #wechatModal.active {
+            z-index: 1002;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* 弹窗内容增强 - 使用纯色背景避免分层 */
+        .modal-content {
+            background: rgba(13, 43, 69, 0.98); /* 改用纯色背景，避免分层 */
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        inset 0 0 60px rgba(200, 170, 110, 0.05);
+            border: 2px solid rgba(200, 170, 110, 0.3);
+            position: relative;
+            animation: slideIn 0.4s ease-out;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            /* 防止背景穿透 */
+            isolation: isolate;
+            z-index: 10;
+        }
+
+        /* 滚动区域背景增强 - 防止滚动时看到背景 */
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(13, 43, 69, 0.98); /* 与弹窗背景完全一致，避免分层 */
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, 
+                rgba(200, 170, 110, 0.6), 
+                rgba(0, 255, 255, 0.4));
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(200, 170, 110, 0.3);
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, 
+                rgba(200, 170, 110, 0.8), 
+                rgba(0, 255, 255, 0.6));
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        /* 微信弹窗内容特殊样式 */
+        #wechatModal .modal-content {
+            animation: slideIn 0.5s ease-out, qrCodeContainerAppear 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes qrCodeContainerAppear {
+            from {
+                transform: translateY(20px) scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 弹窗关闭时的动画 */
+        .tech-modal.closing {
+            animation: fadeOut 0.2s ease-in forwards;
+        }
+
+        .modal-content.closing {
+            animation: slideOut 0.2s ease-in forwards;
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-20px) scale(0.95);
+                opacity: 0;
+            }
+        }
+
+        /* 新功能弹窗样式 */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .skill-item {
+            background: rgba(200, 170, 110, 0.05);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(200, 170, 110, 0.1);
+            border-color: rgba(200, 170, 110, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .skill-name {
+            color: #c8aa6e;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .skill-level {
+            color: rgba(200, 170, 110, 0.7);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(200, 170, 110, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #c8aa6e, #00ffff);
+            border-radius: 3px;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding-bottom: 20px; /* 确保最后一行项目不会紧贴底部 */
+        }
+
+        .project-item {
+            background: linear-gradient(135deg, 
+                rgba(13, 43, 69, 0.6) 0%,
+                rgba(200, 170, 110, 0.08) 100%);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px); /* 增加背景模糊效果，减少色差 */
+        }
+
+        .project-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .project-item:hover::before {
+            left: 100%;
+        }
+
+        .project-item:hover {
+            background: rgba(200, 170, 110, 0.1);
+            border-color: rgba(200, 170, 110, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .project-title {
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .project-desc {
+            color: rgba(200, 170, 110, 0.7);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            background: rgba(200, 170, 110, 0.05);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(200, 170, 110, 0.1);
+            border-color: rgba(200, 170, 110, 0.5);
+            transform: translateX(5px);
+            box-shadow: 0 3px 15px rgba(255, 105, 180, 0.2);
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 105, 180, 0.1);
+            border-radius: 8px;
+            color: #ff69b4;
+            font-size: 20px;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-label {
+            color: #ff69b4;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .contact-value {
+            color: rgba(200, 170, 110, 0.8);
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: rgba(255, 105, 180, 0.1);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            color: #ff69b4;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 105, 180, 0.2);
+            border-color: #ff69b4;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+
+        /* 统计卡片样式 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(200, 170, 110, 0.05);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(200, 170, 110, 0.1);
+            border-color: rgba(200, 170, 110, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            color: #00ffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .stat-label {
+            color: rgba(200, 170, 110, 0.7);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 时间线样式 */
+        .timeline {
+            position: relative;
+            margin-top: 20px;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #c8aa6e, #00ffff, #ff00ff);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            background: rgba(200, 170, 110, 0.05);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 15px;
+            width: 12px;
+            height: 12px;
+            background: #c8aa6e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(200, 170, 110, 0.8);
+        }
+
+        .timeline-item:hover {
+            background: rgba(200, 170, 110, 0.1);
+            border-color: rgba(200, 170, 110, 0.5);
+            transform: translateX(5px);
+        }
+
+        .timeline-date {
+            color: #c8aa6e;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            color: #00ffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            color: rgba(200, 170, 110, 0.7);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* 通知提示样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(13, 43, 69, 0.95);
+            border: 2px solid rgba(200, 170, 110, 0.5);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: #c8aa6e;
+            font-size: 14px;
+            z-index: 2000;
+            animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        0 0 20px rgba(0, 255, 255, 0.2);
+            max-width: 300px;
+        }
+
+        .notification.success {
+            border-color: rgba(0, 255, 0, 0.5);
+            color: #00ff00;
+        }
+
+        .notification.error {
+            border-color: rgba(255, 0, 0, 0.5);
+            color: #ff0000;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+        }
+
+        /* 搜索框样式 */
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(200, 170, 110, 0.05);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 8px;
+            color: #c8aa6e;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: rgba(200, 170, 110, 0.5);
+            background: rgba(200, 170, 110, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .search-box::placeholder {
+            color: rgba(200, 170, 110, 0.4);
+        }
+
+        /* 代码片段样式 */
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ffff;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-snippet::before {
+            content: 'CODE';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 10px;
+            color: rgba(200, 170, 110, 0.4);
+            text-transform: uppercase;
+        }
+
+        .code-snippet pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .skills-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .notification {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+
+        /* 弹窗层级和视觉增强 */
+        .tech-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* 确保微信弹窗有更高的层级 */
+        #wechatModal {
+            z-index: 1001;
+        }
+
+        /* 当多个弹窗存在时，确保后打开的在上层 */
+        .tech-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1001;
+        }
+
+        /* 微信弹窗特殊样式 */
+        #wechatModal.active {
+            z-index: 1002;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* 弹窗内容增强 - 使用纯色背景避免分层 */
+        .modal-content {
+            background: rgba(13, 43, 69, 0.98); /* 改用纯色背景，避免分层 */
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        inset 0 0 60px rgba(200, 170, 110, 0.05);
+            border: 2px solid rgba(200, 170, 110, 0.3);
+            position: relative;
+            animation: slideIn 0.4s ease-out;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            /* 防止背景穿透 */
+            isolation: isolate;
+            z-index: 10;
+        }
+
+        /* 滚动区域背景增强 - 防止滚动时看到背景 */
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(13, 43, 69, 0.98); /* 与弹窗背景完全一致，避免分层 */
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, 
+                rgba(200, 170, 110, 0.6), 
+                rgba(0, 255, 255, 0.4));
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(200, 170, 110, 0.3);
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, 
+                rgba(200, 170, 110, 0.8), 
+                rgba(0, 255, 255, 0.6));
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        /* 微信弹窗内容特殊样式 */
+        #wechatModal .modal-content {
+            animation: slideIn 0.5s ease-out, qrCodeContainerAppear 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes qrCodeContainerAppear {
+            from {
+                transform: translateY(20px) scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 弹窗关闭时的动画 */
+        .tech-modal.closing {
+            animation: fadeOut 0.2s ease-in forwards;
+        }
+
+        .modal-content.closing {
+            animation: slideOut 0.2s ease-in forwards;
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-20px) scale(0.95);
+                opacity: 0;
+            }
+        }
+
+        /* 微信二维码特殊动画 */
+        .qrcode-image {
+            animation: qrCodeAppear 0.5s ease-out;
+        }
+
+        @keyframes qrCodeAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotateY(-90deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .qrcode-tip {
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        /* 弹窗背景增强 */
+        .tech-modal.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, 
+                rgba(200, 170, 110, 0.1) 0%, 
+                transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* 额外的动画效果 */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* 霓虹闪烁效果 */
+        @keyframes neonFlicker {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(200, 170, 110, 0.8),
+                             0 0 20px rgba(0, 255, 255, 0.4),
+                             0 0 30px rgba(255, 0, 255, 0.3);
+            }
+            25% {
+                text-shadow: 0 0 15px rgba(200, 170, 110, 1),
+                             0 0 25px rgba(0, 255, 255, 0.6),
+                             0 0 35px rgba(255, 0, 255, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 8px rgba(200, 170, 110, 0.6),
+                             0 0 15px rgba(0, 255, 255, 0.3),
+                             0 0 20px rgba(255, 0, 255, 0.2);
+            }
+            75% {
+                text-shadow: 0 0 12px rgba(200, 170, 110, 0.9),
+                             0 0 22px rgba(0, 255, 255, 0.5),
+                             0 0 32px rgba(255, 0, 255, 0.4);
+            }
+        }
+
+        .neon-flicker {
+            animation: neonFlicker 3s ease-in-out infinite;
+        }
+
+        /* 按钮悬停特效 */
+        .bento-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .bento-card:hover::after {
+            left: 100%;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(200, 170, 110, 0.3);
+            border-radius: 50%;
+            border-top-color: #c8aa6e;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 粒子增强效果 */
+        #particles-js {
+            pointer-events: none;
+        }
+
+        /* 鼠标跟随效果 */
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(200, 170, 110, 0.8), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: screen;
+        }
+
+        /* 键盘快捷键提示 */
+        .shortcut-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(13, 43, 69, 0.9);
+            border: 1px solid rgba(200, 170, 110, 0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: rgba(200, 170, 110, 0.8);
+            font-size: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .shortcut-hint.show {
+            opacity: 1;
+        }
+
+        .shortcut-hint kbd {
+            background: rgba(200, 170, 110, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid rgba(200, 170, 110, 0.3);
+            font-family: monospace;
+            margin: 0 2px;
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 20, 40, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #c8aa6e, #00ffff);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #00ffff, #ff00ff);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* 3D翻转效果 */
+        .flip-card {
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background: rgba(200, 170, 110, 0.1);
+            border: 2px solid rgba(200, 170, 110, 0.3);
+        }
+
+        /* 粒子点击波纹效果 */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(200, 170, 110, 0.3);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* 性能优化：减少动画 */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* 暗色模式检测 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0a0e27;
+                --text-primary: #c8aa6e;
+            }
+        }
+
+        /* 高对比度模式支持 */
+        @media (prefers-contrast: high) {
+            .bento-card {
+                border-width: 3px;
+            }
+            
+            .bento-card:hover {
+                border-color: #fff;
             }
         }
 
@@ -946,6 +1883,8 @@
             .modal-content {
                 padding: 30px 20px;
                 max-height: 90vh;
+                /* 移动端也应用纯色背景，避免颜色分层 */
+                background: rgba(13, 43, 69, 0.98);
             }
 
             .modal-title {
@@ -954,6 +1893,11 @@
 
             .article-item {
                 padding: 15px;
+            }
+
+            /* 移动端滚动条背景增强 */
+            .modal-content::-webkit-scrollbar-track {
+                background: rgba(13, 43, 69, 0.98); /* 与弹窗背景完全一致，避免分层 */
             }
         }
     </style>
@@ -1051,6 +1995,24 @@
                     <h3>📚 技术收藏</h3>
                     <p>精选技术文章和资源</p>
                 </div>
+
+                <!-- 项目展示卡片 -->
+                <div onclick="openProjectsModal()" class="bento-card link-card" style="background: rgba(255, 215, 0, 0.08); border-color: rgba(255, 215, 0, 0.3);">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor" style="color: #ffd700;">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <h3 style="color: #ffd700;">🚀 项目集</h3>
+                    <p>我的开源作品展示</p>
+                </div>
+
+                <!-- 联系方式卡片 -->
+                <div onclick="openContactModal()" class="bento-card link-card" style="background: rgba(255, 105, 180, 0.08); border-color: rgba(255, 105, 180, 0.3);">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor" style="color: #ff69b4;">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <h3 style="color: #ff69b4;">📧 联系我</h3>
+                    <p>邮箱和其他联系方式</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1120,6 +2082,58 @@
         </div>
     </div>
 
+    <!-- 技能栈弹窗 -->
+    <div id="skillsModal" class="tech-modal" onclick="closeSkillsModalOnOutside(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎯 技术技能栈</h2>
+                <button class="close-btn" onclick="closeSkillsModal()">×</button>
+            </div>
+            <div class="skills-grid" id="skillsGrid">
+                <!-- 技能项目将通过JS动态生成 -->
+            </div>
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid rgba(200, 170, 110, 0.2);">
+                <h3 style="color: #c8aa6e; margin-bottom: 15px; font-size: 18px;">📈 技术统计</h3>
+                <div class="stats-grid" id="statsGrid">
+                    <!-- 统计数据将通过JS动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 项目集弹窗 -->
+    <div id="projectsModal" class="tech-modal" onclick="closeProjectsModalOnOutside(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🚀 项目作品集</h2>
+                <button class="close-btn" onclick="closeProjectsModal()">×</button>
+            </div>
+            <input type="text" class="search-box" id="projectSearch" placeholder="🔍 搜索项目...">
+            <div class="projects-grid" id="projectsGrid">
+                <!-- 项目将通过JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 联系方式弹窗 -->
+    <div id="contactModal" class="tech-modal" onclick="closeContactModalOnOutside(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📧 联系方式</h2>
+                <button class="close-btn" onclick="closeContactModal()">×</button>
+            </div>
+            <div class="contact-info" id="contactInfo">
+                <!-- 联系信息将通过JS动态生成 -->
+            </div>
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid rgba(200, 170, 110, 0.2);">
+                <h3 style="color: #ff69b4; margin-bottom: 15px; font-size: 18px;">🕐 工作经历</h3>
+                <div class="timeline" id="timeline">
+                    <!-- 时间线将通过JS动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         // 技术文章弹窗控制
@@ -1129,8 +2143,20 @@
         }
 
         function closeTechModal() {
-            document.getElementById('techModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
+            const modal = document.getElementById('techModal');
+            modal.classList.add('closing');
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.add('closing');
+            }
+            
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                if (content) {
+                    content.classList.remove('closing');
+                }
+                document.body.style.overflow = 'auto';
+            }, 200);
         }
 
         function closeModalOnOutside(event) {
@@ -1141,13 +2167,35 @@
 
         // 微信二维码弹窗控制
         function openWechatModal() {
-            document.getElementById('wechatModal').classList.add('active');
+            const modal = document.getElementById('wechatModal');
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // 确保弹窗在最上层
+            modal.style.zIndex = '1002';
+            
+            // 添加打开动画
+            modal.style.animation = 'fadeIn 0.3s ease-out';
         }
 
         function closeWechatModal() {
-            document.getElementById('wechatModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
+            const modal = document.getElementById('wechatModal');
+            
+            // 添加关闭动画
+            modal.classList.add('closing');
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.add('closing');
+            }
+            
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                if (content) {
+                    content.classList.remove('closing');
+                }
+                document.body.style.overflow = 'auto';
+                modal.style.zIndex = '1001';
+            }, 200);
         }
 
         function closeWechatModalOnOutside(event) {
@@ -1156,13 +2204,731 @@
             }
         }
 
+        // 从联系方式弹窗中打开微信二维码
+        function openWechatModalFromContact() {
+            // 先关闭联系方式弹窗（带动画）
+            const contactModal = document.getElementById('contactModal');
+            contactModal.classList.add('closing');
+            const contactContent = contactModal.querySelector('.modal-content');
+            if (contactContent) {
+                contactContent.classList.add('closing');
+            }
+            
+            setTimeout(() => {
+                contactModal.classList.remove('active', 'closing');
+                if (contactContent) {
+                    contactContent.classList.remove('closing');
+                }
+                
+                // 延迟一小段时间再打开微信弹窗，确保动画完成
+                setTimeout(() => {
+                    openWechatModal();
+                }, 100);
+            }, 200);
+        }
+
         // ESC 键关闭弹窗
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                closeTechModal();
-                closeWechatModal();
+                // 检查哪个弹窗是当前激活的，优先关闭最上层的
+                const modals = [
+                    { id: 'wechatModal', close: closeWechatModal },
+                    { id: 'contactModal', close: closeContactModal },
+                    { id: 'skillsModal', close: closeSkillsModal },
+                    { id: 'projectsModal', close: closeProjectsModal },
+                    { id: 'techModal', close: closeTechModal }
+                ];
+                
+                // 从上层到下层检查
+                for (let modal of modals) {
+                    const element = document.getElementById(modal.id);
+                    if (element && element.classList.contains('active')) {
+                        modal.close();
+                        break; // 只关闭一个弹窗
+                    }
+                }
             }
         });
+
+        // 技能栈数据
+        const skillsData = [
+            { name: 'Go', level: 85, category: '前端' },
+            { name: 'HTML/CSS', level: 90, category: '前端' },
+            { name: 'React', level: 75, category: '前端框架' },
+            { name: 'Vue.js', level: 70, category: '前端框架' },
+            { name: 'Node.js', level: 65, category: '后端' },
+            { name: 'Python', level: 60, category: '后端' },
+            { name: 'Git', level: 80, category: '工具' },
+            { name: 'Docker', level: 55, category: '运维' },
+            { name: 'SQL', level: 70, category: '数据库' },
+            { name: 'Linux', level: 65, category: '系统' },
+            { name: 'Algorithm', level: 75, category: '基础' },
+            { name: 'Problem Solving', level: 85, category: '软技能' }
+        ];
+
+        // 项目数据
+        const projectsData = [
+            {
+                name: 'okhttp-openharmony',
+                desc: '鸿蒙版本的okhttp,使用方式保持android一致',
+                tags: ['js', 'arkts', 'harmonyos'],
+                link: 'https://github.com/SettZhao/okhttp-openHarmony'
+            },
+            {
+                name: 'socket-openharmony',
+                desc: '与原生鸿蒙更好用的socket模块',
+                tags: ['socket', 'arkts', 'harmonyos'],
+                link: 'https://github.com/SettZhao/socket-openHarmony'
+            },
+            {
+                name: '待开发项目3',
+                desc: '移动端混合应用开发',
+                tags: ['React Native', 'Firebase'],
+                link: '#'
+            },
+            {
+                name: '待开发项目4',
+                desc: 'AI聊天机器人项目',
+                tags: ['Python', 'NLP', 'API'],
+                link: '#'
+            }
+        ];
+
+        // 联系方式数据
+        const contactData = [
+            {
+                icon: '📧',
+                label: '电子邮箱',
+                value: 'zhf1225@foxmail.com',
+                type: 'email'
+            },
+            {
+                icon: '📱',
+                label: '微信',
+                value: '扫描右侧二维码',
+                type: 'wechat'
+            }
+        ];
+
+        // 工作经历数据
+        const timelineData = [
+            {
+                date: '2024 - 至今',
+                title: '移动端开发工程师',
+                desc: '鸿蒙应用/开源库开发'
+            },
+            {
+                date: '2021 - 2023',
+                title: '初级开发工程师',
+                desc: 'casebot;atlas...'
+            },
+            {
+                date: '2017 - 2021',
+                title: '学生时代',
+                desc: '计算机科学专业学习'
+            }
+        ];
+
+        // 统计数据
+        const statsData = [
+            { number: '50+', label: '开源项目' },
+            { number: '1000+', label: '代码提交' },
+            { number: '5+', label: '技术栈' },
+            { number: '3+', label: '工作经验' }
+        ];
+
+        // 技能栈弹窗控制
+        function openSkillsModal() {
+            document.getElementById('skillsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderSkills();
+            renderStats();
+        }
+
+        function closeSkillsModal() {
+            const modal = document.getElementById('skillsModal');
+            modal.classList.add('closing');
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.add('closing');
+            }
+            
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                if (content) {
+                    content.classList.remove('closing');
+                }
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        function closeSkillsModalOnOutside(event) {
+            if (event.target.id === 'skillsModal') {
+                closeSkillsModal();
+            }
+        }
+
+        // 项目弹窗控制
+        function openProjectsModal() {
+            document.getElementById('projectsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderProjects();
+        }
+
+        function closeProjectsModal() {
+            const modal = document.getElementById('projectsModal');
+            modal.classList.add('closing');
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.add('closing');
+            }
+            
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                if (content) {
+                    content.classList.remove('closing');
+                }
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        function closeProjectsModalOnOutside(event) {
+            if (event.target.id === 'projectsModal') {
+                closeProjectsModal();
+            }
+        }
+
+        // 联系方式弹窗控制
+        function openContactModal() {
+            document.getElementById('contactModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderContact();
+            renderTimeline();
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('closing');
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.classList.add('closing');
+            }
+            
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                if (content) {
+                    content.classList.remove('closing');
+                }
+                document.body.style.overflow = 'auto';
+            }, 200);
+        }
+
+        function closeContactModalOnOutside(event) {
+            if (event.target.id === 'contactModal') {
+                closeContactModal();
+            }
+        }
+
+        // 渲染技能
+        function renderSkills() {
+            const container = document.getElementById('skillsGrid');
+            container.innerHTML = '';
+            
+            skillsData.forEach(skill => {
+                const skillItem = document.createElement('div');
+                skillItem.className = 'skill-item';
+                skillItem.innerHTML = `
+                    <div class="skill-name">${skill.name}</div>
+                    <div class="skill-level">${skill.category} · ${skill.level}%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 0%"></div>
+                    </div>
+                `;
+                container.appendChild(skillItem);
+                
+                // 动画效果
+                setTimeout(() => {
+                    const progress = skillItem.querySelector('.skill-progress');
+                    progress.style.width = skill.level + '%';
+                }, 100);
+            });
+        }
+
+        // 渲染统计
+        function renderStats() {
+            const container = document.getElementById('statsGrid');
+            container.innerHTML = '';
+            
+            statsData.forEach(stat => {
+                const statItem = document.createElement('div');
+                statItem.className = 'stat-item';
+                statItem.innerHTML = `
+                    <div class="stat-number">${stat.number}</div>
+                    <div class="stat-label">${stat.label}</div>
+                `;
+                container.appendChild(statItem);
+            });
+        }
+
+        // 渲染项目
+        function renderProjects() {
+            const container = document.getElementById('projectsGrid');
+            const searchInput = document.getElementById('projectSearch');
+            
+            function filterProjects(searchTerm = '') {
+                container.innerHTML = '';
+                const filtered = projectsData.filter(project => 
+                    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    project.desc.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    project.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+                );
+                
+                filtered.forEach(project => {
+                    const projectItem = document.createElement('div');
+                    projectItem.className = 'project-item';
+                    projectItem.innerHTML = `
+                        <div class="project-title">${project.name}</div>
+                        <div class="project-desc">${project.desc}</div>
+                        <div class="project-tags">
+                            ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                        </div>
+                    `;
+                    projectItem.onclick = () => {
+                        if (project.link && project.link !== '#') {
+                            window.open(project.link, '_blank');
+                        } else {
+                            showNotification('项目即将开放，敬请期待！', 'info');
+                        }
+                    };
+                    container.appendChild(projectItem);
+                });
+                
+                if (filtered.length === 0) {
+                    container.innerHTML = '<p style="color: rgba(200, 170, 110, 0.5); text-align: center; padding: 20px;">未找到匹配的项目</p>';
+                }
+            }
+            
+            filterProjects();
+            
+            // 搜索功能
+            searchInput.oninput = (e) => {
+                filterProjects(e.target.value);
+            };
+        }
+
+        // 渲染联系方式
+        function renderContact() {
+            const container = document.getElementById('contactInfo');
+            container.innerHTML = '';
+            
+            contactData.forEach(contact => {
+                const contactItem = document.createElement('div');
+                contactItem.className = 'contact-item';
+                
+                let valueHTML = contact.value;
+                if (contact.type === 'email' || contact.type === 'link') {
+                    valueHTML = `
+                        <span>${contact.value}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('${contact.value}', this)">复制</button>
+                    `;
+                } else if (contact.type === 'wechat') {
+                    valueHTML = `
+                        <span>${contact.value}</span>
+                        <button class="copy-btn" onclick="openWechatModalFromContact()">查看二维码</button>
+                    `;
+                }
+                
+                contactItem.innerHTML = `
+                    <div class="contact-icon">${contact.icon}</div>
+                    <div class="contact-details">
+                        <div class="contact-label">${contact.label}</div>
+                        <div class="contact-value">${valueHTML}</div>
+                    </div>
+                `;
+                container.appendChild(contactItem);
+            });
+        }
+
+        // 从联系方式弹窗中打开微信二维码
+        function openWechatModalFromContact() {
+            // 先关闭联系方式弹窗
+            closeContactModal();
+            // 延迟一小段时间再打开微信弹窗，确保动画完成
+            setTimeout(() => {
+                openWechatModal();
+            }, 100);
+        }
+
+        // 渲染时间线
+        function renderTimeline() {
+            const container = document.getElementById('timeline');
+            container.innerHTML = '';
+            
+            timelineData.forEach(item => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                timelineItem.innerHTML = `
+                    <div class="timeline-date">${item.date}</div>
+                    <div class="timeline-title">${item.title}</div>
+                    <div class="timeline-desc">${item.desc}</div>
+                `;
+                container.appendChild(timelineItem);
+            });
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '已复制';
+                button.classList.add('copied');
+                showNotification('已复制到剪贴板！', 'success');
+                
+                setTimeout(() => {
+                    button.textContent = '复制';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                showNotification('复制失败，请手动复制', 'error');
+            });
+        }
+
+        // 通知提示
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // 页面加载完成后的欢迎消息
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                showNotification('欢迎访问 Sett Zhao 的个人主页！🎉', 'success');
+            }, 1000);
+        });
+
+        // 点击统计（简单实现）
+        let clickCount = 0;
+        document.addEventListener('click', (e) => {
+            clickCount++;
+            
+            // 创建波纹效果
+            createRipple(e.clientX, e.clientY);
+            
+            // 每10次点击显示统计
+            if (clickCount % 10 === 0 && clickCount > 0) {
+                showNotification(`🎉 你已经点击了 ${clickCount} 次！`, 'success');
+            }
+        });
+
+        // 创建波纹效果
+        function createRipple(x, y) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = (x - 25) + 'px';
+            ripple.style.top = (y - 25) + 'px';
+            ripple.style.width = '50px';
+            ripple.style.height = '50px';
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // 鼠标跟随效果
+        let cursorTrail = null;
+        let mouseX = 0, mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            if (!cursorTrail) {
+                cursorTrail = document.createElement('div');
+                cursorTrail.className = 'cursor-trail';
+                document.body.appendChild(cursorTrail);
+            }
+            
+            cursorTrail.style.left = mouseX + 'px';
+            cursorTrail.style.top = mouseY + 'px';
+            cursorTrail.style.transform = 'translate(-50%, -50%)';
+        });
+
+        // 键盘快捷键系统
+        const shortcuts = {
+            'Escape': '关闭所有弹窗',
+            'h': '显示/隐藏快捷键提示',
+            't': '打开技术收藏',
+            's': '打开技能栈',
+            'p': '打开项目集',
+            'c': '打开联系方式',
+            'w': '打开微信二维码',
+            'g': '访问GitHub',
+            '/': '聚焦搜索框'
+        };
+
+        let shortcutHintTimeout = null;
+
+        document.addEventListener('keydown', (e) => {
+            // 如果在输入框中，不触发快捷键
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            
+            switch(key) {
+                case 'h':
+                    toggleShortcutHint();
+                    break;
+                case 't':
+                    openTechModal();
+                    showNotification('打开技术收藏', 'info');
+                    break;
+                case 's':
+                    openSkillsModal();
+                    showNotification('打开技能栈', 'info');
+                    break;
+                case 'p':
+                    openProjectsModal();
+                    showNotification('打开项目集', 'info');
+                    break;
+                case 'c':
+                    openContactModal();
+                    showNotification('打开联系方式', 'info');
+                    break;
+                case 'w':
+                    openWechatModal();
+                    showNotification('打开微信二维码', 'info');
+                    break;
+                case 'g':
+                    window.open('https://github.com/SettZhao', '_blank');
+                    showNotification('正在打开GitHub...', 'info');
+                    break;
+                case '/':
+                    e.preventDefault();
+                    const searchBox = document.querySelector('#projectSearch');
+                    if (searchBox) {
+                        searchBox.focus();
+                    }
+                    break;
+            }
+        });
+
+        // 显示/隐藏快捷键提示
+        function toggleShortcutHint() {
+            let hint = document.querySelector('.shortcut-hint');
+            if (!hint) {
+                hint = document.createElement('div');
+                hint.className = 'shortcut-hint';
+                document.body.appendChild(hint);
+            }
+            
+            if (hint.classList.contains('show')) {
+                hint.classList.remove('show');
+            } else {
+                let content = '<strong>键盘快捷键：</strong><br>';
+                for (let [key, desc] of Object.entries(shortcuts)) {
+                    content += `<kbd>${key.toUpperCase()}</kbd> ${desc}<br>`;
+                }
+                hint.innerHTML = content;
+                hint.classList.add('show');
+                
+                clearTimeout(shortcutHintTimeout);
+                shortcutHintTimeout = setTimeout(() => {
+                    hint.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // 页面可见性变化处理
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                document.title = '👋 等你回来... | Sett Zhao';
+            } else {
+                document.title = 'Sett Zhao - 个人主页';
+                showNotification('欢迎回来！🎉', 'success');
+            }
+        });
+
+        // 性能监控（简单实现）
+        let performanceStats = {
+            loadTime: 0,
+            domReady: 0
+        };
+
+        window.addEventListener('load', () => {
+            performanceStats.loadTime = performance.now();
+            console.log(`页面加载时间: ${performanceStats.loadTime.toFixed(2)}ms`);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            performanceStats.domReady = performance.now();
+        });
+
+        // 错误处理
+        window.addEventListener('error', (e) => {
+            console.error('页面错误:', e.error);
+            showNotification('抱歉，发生了一个小错误', 'error');
+        });
+
+        // 网络状态检测
+        window.addEventListener('online', () => {
+            showNotification('网络已连接', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('网络已断开', 'error');
+        });
+
+        // 自动保存用户偏好（使用localStorage）
+        function saveUserPreference(key, value) {
+            try {
+                localStorage.setItem(`settzhao_${key}`, JSON.stringify(value));
+            } catch (e) {
+                console.warn('无法保存用户偏好:', e);
+            }
+        }
+
+        function getUserPreference(key, defaultValue = null) {
+            try {
+                const item = localStorage.getItem(`settzhao_${key}`);
+                return item ? JSON.parse(item) : defaultValue;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+
+        // 记录用户交互
+        function trackInteraction(action, data = {}) {
+            const interaction = {
+                timestamp: new Date().toISOString(),
+                action: action,
+                data: data,
+                userAgent: navigator.userAgent,
+                screen: `${window.screen.width}x${window.screen.height}`
+            };
+            
+            // 保存到本地存储（实际项目中可以发送到服务器）
+            const history = getUserPreference('interaction_history', []);
+            history.push(interaction);
+            
+            // 只保留最近50条记录
+            if (history.length > 50) {
+                history.shift();
+            }
+            
+            saveUserPreference('interaction_history', history);
+            console.log('用户交互记录:', interaction);
+        }
+
+        // 为所有可点击元素添加跟踪
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.bento-card')) {
+                const card = e.target.closest('.bento-card');
+                const text = card.textContent.trim().split('\n')[0];
+                trackInteraction('card_click', { card: text });
+            }
+        });
+
+        // 页面卸载前的清理
+        window.addEventListener('beforeunload', () => {
+            trackInteraction('page_exit', { 
+                totalClicks: clickCount,
+                sessionDuration: performance.now()
+            });
+        });
+
+        // 添加右键菜单自定义（可选）
+        document.addEventListener('contextmenu', (e) => {
+            // 可以在这里添加自定义右键菜单
+            // e.preventDefault(); // 如果要禁用默认右键菜单
+        });
+
+        // 双击顶部返回顶部
+        let lastScrollTop = 0;
+        document.addEventListener('dblclick', (e) => {
+            if (e.clientY < 100) { // 双击顶部区域
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                showNotification('已返回顶部', 'info');
+            }
+        });
+
+        // 滚动时的视差效果
+        let ticking = false;
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.cyber-grid, .city-scape');
+            
+            parallaxElements.forEach((el, index) => {
+                const speed = 0.5 + (index * 0.2);
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+            
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        });
+
+        // 添加随机问候语
+        const greetings = [
+            '欢迎来到我的数字世界！',
+            '很高兴见到你！',
+            '探索我的技术之旅',
+            '代码改变世界',
+            '让技术点亮生活',
+            '创新永无止境'
+        ];
+
+        function getRandomGreeting() {
+            return greetings[Math.floor(Math.random() * greetings.length)];
+        }
+
+        // 每30秒更换一次问候语
+        setInterval(() => {
+            const subtitle = document.querySelector('.subtitle');
+            if (subtitle && Math.random() > 0.7) { // 30%概率更换
+                subtitle.textContent = getRandomGreeting();
+                subtitle.style.animation = 'none';
+                setTimeout(() => {
+                    subtitle.style.animation = 'fadeIn 1s ease-out';
+                }, 10);
+            }
+        }, 30000);
+
+        // 添加 Easter Egg（复活节彩蛋）
+        let konamiCode = [];
+        const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10); // 只保留最近10个按键
+            
+            if (konamiCode.join(',') === konamiPattern.join(',')) {
+                showNotification('🎮 秘籍激活！你发现了彩蛋！', 'success');
+                // 触发特殊效果
+                document.body.style.filter = 'hue-rotate(180deg)';
+                setTimeout(() => {
+                    document.body.style.filter = '';
+                }, 2000);
+                konamiCode = []; // 重置
+            }
+        });
+
+        // 初始化完成
+        console.log('%c Sett Zhao 个人主页已加载完成 ', 'background: #c8aa6e; color: #0a1428; font-size: 16px; font-weight: bold; padding: 10px;');
+        console.log('%c 快捷键提示：按 H 键查看所有快捷键 ', 'background: #00ffff; color: #0a1428; font-size: 12px; padding: 5px;');
+        console.log('%c 彩蛋提示：试试 Konami Code ↑↑↓↓←→←→BA ', 'background: #ff00ff; color: #fff; font-size: 12px; padding: 5px;');
 
         // 创建数据流效果
         function createDataStream() {
