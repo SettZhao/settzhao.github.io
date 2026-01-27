@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>调试 - 菜谱详情</title>
+    <style>
+        body { font-family: Arial; padding: 20px; line-height: 1.6; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .step { background: white; padding: 10px; margin: 5px 0; border-left: 3px solid #ff6b6b; }
+        .tip { background: #fff9e6; padding: 8px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>菜谱数据调试页面</h1>
+    <div id="debug"></div>
+    <hr>
+    <div id="content"></div>
+
+    <script src="recipes-data.js"></script>
+    <script>
+        const debugDiv = document.getElementById('debug');
+        const contentDiv = document.getElementById('content');
+        
+        // 调试信息
+        debugDiv.innerHTML = '<div class="debug">正在加载数据...</div>';
+        
+        try {
+            // 检查数据是否加载
+            if (typeof recipesData === 'undefined') {
+                throw new Error('recipesData 未定义');
+            }
+            debugDiv.innerHTML += '<div class="debug success">✅ recipesData 已加载，包含 ' + recipesData.length + ' 个菜谱</div>';
+            
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const recipeId = urlParams.get('id') || 'hongshaorou';
+            debugDiv.innerHTML += '<div class="debug">当前菜谱ID: ' + recipeId + '</div>';
+            
+            // 查找菜谱
+            const recipe = recipesData.find(r => r.id === recipeId);
+            
+            if (!recipe) {
+                throw new Error('未找到ID为 ' + recipeId + ' 的菜谱');
+            }
+            
+            debugDiv.innerHTML += '<div class="debug success">✅ 找到菜谱: ' + recipe.name + '</div>';
+            debugDiv.innerHTML += '<div class="debug">Steps: ' + (recipe.steps ? recipe.steps.length : 0) + ' 个</div>';
+            debugDiv.innerHTML += '<div class="debug">Tips: ' + (recipe.tips ? recipe.tips.length : 0) + ' 个</div>';
+            
+            // 显示完整菜谱
+            let html = '<h2>' + recipe.emoji + ' ' + recipe.name + '</h2>';
+            html += '<p><em>' + recipe.subtitle + '</em></p>';
+            html += '<p><strong>用料：</strong></p>';
+            html += '<ul>';
+            recipe.ingredients.forEach(ing => {
+                html += '<li>' + ing.name + ': ' + ing.amount + '</li>';
+            });
+            html += '</ul>';
+            
+            html += '<h3>🔪 制作步骤</h3>';
+            if (recipe.steps && recipe.steps.length > 0) {
+                recipe.steps.forEach((step, index) => {
+                    html += '<div class="step"><strong>步骤 ' + (index + 1) + ':</strong> ' + step + '</div>';
+                });
+            } else {
+                html += '<div class="error">❌ 没有步骤数据</div>';
+            }
+            
+            html += '<h3>💡 小贴士</h3>';
+            if (recipe.tips && recipe.tips.length > 0) {
+                recipe.tips.forEach(tip => {
+                    html += '<div class="tip">• ' + tip + '</div>';
+                });
+            } else {
+                html += '<div class="error">❌ 没有小贴士数据</div>';
+            }
+            
+            contentDiv.innerHTML = html;
+            
+        } catch (error) {
+            debugDiv.innerHTML += '<div class="debug error">❌ 错误: ' + error.message + '</div>';
+            console.error(error);
+        }
+    </script>
+</body>
+</html>

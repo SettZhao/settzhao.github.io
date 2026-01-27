@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的菜谱 - 分享美食时光</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 50%, #ff7675 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #ff6b6b;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        /* 菜谱网格 */
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            animation: fadeIn 1s ease;
+        }
+
+        .recipe-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+
+        .recipe-content {
+            padding: 25px;
+        }
+
+        .recipe-title {
+            font-size: 1.8em;
+            color: #2d3436;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .recipe-subtitle {
+            font-size: 1em;
+            color: #636e72;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            color: #636e72;
+        }
+
+        .meta-item svg {
+            width: 18px;
+            height: 18px;
+            fill: #ff6b6b;
+        }
+
+        .recipe-description {
+            font-size: 1em;
+            color: #636e72;
+            line-height: 1.6;
+        }
+
+        .recipe-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        .empty-state svg {
+            width: 150px;
+            height: 150px;
+            fill: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h2 {
+            font-size: 2em;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-button" title="返回主页">
+        ←
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <h1>🍳 我的拿手菜</h1>
+            <p>记录每一道用心烹饪的美食</p>
+        </div>
+
+        <div class="recipes-grid" id="recipesGrid">
+            <!-- 菜谱卡片将由 JavaScript 自动生成 -->
+        </div>
+    </div>
+
+    <!-- 引入菜谱数据 -->
+    <script src="recipes-data.js"></script>
+    
+    <script>
+        // 动态生成菜谱卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipesGrid = document.getElementById('recipesGrid');
+            
+            // 如果没有菜谱数据，显示空状态
+            if (!recipesData || recipesData.length === 0) {
+                recipesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/>
+                        </svg>
+                        <h2>还没有菜谱</h2>
+                        <p>快去 recipes-data.js 添加你的拿手好菜吧！</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 生成菜谱卡片
+            recipesData.forEach((recipe, index) => {
+                const card = document.createElement('a');
+                card.href = `detail.html?id=${recipe.id}`;
+                card.className = 'recipe-card';
+                card.style.animation = `fadeIn 0.6s ease ${index * 0.1}s both`;
+                
+                // 检查图片是否存在，否则使用emoji
+                const imageContent = recipe.image && recipe.image !== '' 
+                    ? `<img src="${recipe.image}" alt="${recipe.name}" class="recipe-image" onerror="this.outerHTML='<div class=\\'recipe-image\\'>${recipe.emoji}</div>'">`
+                    : `<div class="recipe-image">${recipe.emoji}</div>`;
+                
+                card.innerHTML = `
+                    ${imageContent}
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">${recipe.name}</h3>
+                        <p class="recipe-subtitle">${recipe.subtitle}</p>
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
+                                <span>${recipe.time}</span>
+                            </div>
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z"/></svg>
+                                <span>难度${recipe.difficulty}</span>
+                            </div>
+                        </div>
+                        <p class="recipe-description">${recipe.description}</p>
+                        <div class="recipe-tags">
+                            ${recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                recipesGrid.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>

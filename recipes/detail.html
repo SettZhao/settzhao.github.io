@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">菜谱详情 - 我的菜谱</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #ff6b6b;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .recipe-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .recipe-title {
+            font-size: 3em;
+            color: #2d3436;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .recipe-emoji {
+            font-size: 1.2em;
+        }
+
+        .recipe-subtitle {
+            font-size: 1.3em;
+            color: #636e72;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            border-top: 2px solid #f0f0f0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1em;
+            color: #2d3436;
+        }
+
+        .meta-icon {
+            font-size: 1.5em;
+        }
+
+        .recipe-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .recipe-image-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1s ease;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #2d3436;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        .dish-image {
+            width: 100%;
+            height: 450px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .dish-image-placeholder {
+            width: 100%;
+            height: 450px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-caption {
+            text-align: center;
+            color: #636e72;
+            font-style: italic;
+            margin-top: 15px;
+            font-size: 1em;
+        }
+
+        .ingredients-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1.2s ease;
+        }
+
+        .ingredients-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .ingredient-item {
+            background: linear-gradient(135deg, #fff5f5, #ffe9e9);
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .ingredient-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+        }
+
+        .ingredient-name {
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 1.05em;
+        }
+
+        .ingredient-amount {
+            color: #ff6b6b;
+            font-weight: 500;
+            font-size: 1em;
+        }
+
+        .steps-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1.4s ease;
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+        }
+
+        .step-item {
+            position: relative;
+            padding: 25px 25px 25px 80px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff9f9, #fff);
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.15);
+        }
+
+        .step-item::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.3em;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .step-text {
+            color: #2d3436;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .tips-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1.6s ease;
+        }
+
+        .tips-content {
+            background: linear-gradient(135deg, #fff9e6, #fff);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #fdcb6e;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #2d3436;
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+
+        .tips-list li::before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .error-message h2 {
+            font-size: 3em;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .error-message p {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .error-message a {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #ff6b6b;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .error-message a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .recipe-title {
+                font-size: 2em;
+            }
+
+            .recipe-header,
+            .recipe-image-section,
+            .ingredients-section,
+            .steps-section,
+            .tips-section {
+                padding: 25px;
+            }
+
+            .ingredients-list {
+                grid-template-columns: 1fr;
+            }
+
+            .step-item {
+                padding-left: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button" title="返回菜谱列表">
+        ←
+    </a>
+
+    <div class="container" id="recipeContainer">
+        <!-- 内容将由 JavaScript 动态生成 -->
+    </div>
+
+    <script src="recipes-data.js"></script>
+    <script>
+        // 从URL获取菜谱ID
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipeId = urlParams.get('id');
+
+        // 查找对应的菜谱数据
+        const recipe = recipesData.find(r => r.id === recipeId);
+
+        const container = document.getElementById('recipeContainer');
+
+        if (!recipe) {
+            // 如果没有找到菜谱，显示错误信息
+            container.innerHTML = '<div class="error-message"><h2>😅 找不到这道菜</h2><p>可能是菜谱ID不对，或者这道菜还没有录入</p><a href="index.html">返回菜谱列表</a></div>';
+            throw new Error('Recipe not found');
+        }
+
+        // 更新页面标题
+        document.getElementById('pageTitle').textContent = recipe.name + ' - 我的菜谱';
+
+        // 生成标签HTML
+        let tagsHTML = '';
+        recipe.tags.forEach(tag => {
+            tagsHTML += '<span class="tag">' + tag + '</span>';
+        });
+
+        // 生成图片HTML
+        let imageHTML = '';
+        if (recipe.image && recipe.image !== '') {
+            imageHTML = '<img src="' + recipe.image + '" alt="' + recipe.name + '" class="dish-image" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="dish-image-placeholder" style="display:none">' + recipe.emoji + '</div>';
+        } else {
+            imageHTML = '<div class="dish-image-placeholder">' + recipe.emoji + '</div>';
+        }
+
+        // 生成用料HTML
+        let ingredientsHTML = '';
+        recipe.ingredients.forEach(ing => {
+            ingredientsHTML += '<div class="ingredient-item"><span class="ingredient-name">' + ing.name + '</span><span class="ingredient-amount">' + ing.amount + '</span></div>';
+        });
+
+        // 生成步骤HTML
+        let stepsHTML = '';
+        recipe.steps.forEach(step => {
+            stepsHTML += '<div class="step-item"><p class="step-text">' + step + '</p></div>';
+        });
+
+        // 生成小贴士HTML
+        let tipsHTML = '';
+        recipe.tips.forEach(tip => {
+            tipsHTML += '<li>' + tip + '</li>';
+        });
+
+        // 组装完整HTML
+        container.innerHTML = 
+            '<div class="recipe-header">' +
+                '<h1 class="recipe-title">' +
+                    '<span class="recipe-emoji">' + recipe.emoji + '</span>' +
+                    recipe.name +
+                '</h1>' +
+                '<p class="recipe-subtitle">' + recipe.subtitle + '</p>' +
+                '<div class="recipe-meta">' +
+                    '<div class="meta-item">' +
+                        '<span class="meta-icon">⏱️</span>' +
+                        '<span>烹饪时间：' + recipe.time + '</span>' +
+                    '</div>' +
+                    '<div class="meta-item">' +
+                        '<span class="meta-icon">👥</span>' +
+                        '<span>份量：' + recipe.servings + '</span>' +
+                    '</div>' +
+                    '<div class="meta-item">' +
+                        '<span class="meta-icon">⭐</span>' +
+                        '<span>难度：' + recipe.difficulty + '☆☆☆</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="recipe-tags">' + tagsHTML + '</div>' +
+            '</div>' +
+            '<div class="recipe-image-section">' +
+                '<h2 class="section-title">' +
+                    '<span class="section-icon">📸</span>' +
+                    '成品展示' +
+                '</h2>' +
+                imageHTML +
+                '<p class="image-caption">' + recipe.description + '</p>' +
+            '</div>' +
+            '<div class="ingredients-section">' +
+                '<h2 class="section-title">' +
+                    '<span class="section-icon">🛒</span>' +
+                    '备料清单' +
+                '</h2>' +
+                '<div class="ingredients-list">' + ingredientsHTML + '</div>' +
+            '</div>' +
+            '<div class="steps-section">' +
+                '<h2 class="section-title">' +
+                    '<span class="section-icon">👨‍🍳</span>' +
+                    '烹饪步骤' +
+                '</h2>' +
+                '<div class="steps-list">' + stepsHTML + '</div>' +
+            '</div>' +
+            '<div class="tips-section">' +
+                '<h2 class="section-title">' +
+                    '<span class="section-icon">💡</span>' +
+                    '赵师傅小贴士' +
+                '</h2>' +
+                '<div class="tips-content">' +
+                    '<ul class="tips-list">' + tipsHTML + '</ul>' +
+                '</div>' +
+            '</div>';
+    </script>
+</body>
+</html>
